@@ -47,65 +47,48 @@ const checkNeighbor = (minBoard, x, y) => {
   let count = 0
   const rows = minBoard.length - 1
   const cols = minBoard[0].length - 1
-  console.log()
+
   if (minBoard[x][y] === bomb) {
     return bomb
   }
 
-  const checkBN = (x, y) => {
-    if ((x + 1 <= rows) && minBoard[x + 1][y] === bomb) {
-      count += 1
-    }
+  const xNext = x + 1
+  const xPrev = x - 1
+  const yNext = y + 1
+  const yPrev = y - 1
+
+  if (xNext <= rows && minBoard[xNext][y] === bomb) {
+    count += 1
   }
 
-  const checkTN = (x, y) => {
-    if ((x - 1 >= 0) && minBoard[x - 1][y] === bomb) {
-      count += 1
-    }
+  if (xPrev >= 0 && minBoard[xPrev][y] === bomb) {
+    count += 1
   }
 
-  const checkRN = (x, y) => {
-    if ((y + 1 <= cols) && minBoard[x][y + 1] === bomb) {
-      count += 1
-    }
+  if (yNext <= cols && minBoard[x][yNext] === bomb) {
+    count += 1
   }
 
-  const checkLN = (x, y) => {
-    if ((y - 1 >= 0) && minBoard[x][y - 1] === bomb) {
-      count += 1
-    }
+  if (yPrev >= 0 && minBoard[x][yPrev] === bomb) {
+    count += 1
   }
 
-  const checkBRN = (x, y) => {
-    if ((y + 1 <= cols) && (x + 1 <= rows) && minBoard[x + 1][y + 1] === bomb) {
-      count += 1
-    }
-  }
-  const checkTRN = (x, y) => {
-    if ((y + 1 <= cols) && (x - 1 >= 0) && minBoard[x - 1][y + 1] === bomb) {
-      count += 1
-    }
+  if (xNext <= rows && yNext <= cols && minBoard[xNext][yNext] === bomb) {
+    count += 1
   }
 
-  const checkTLN = (x, y) => {
-    if ((y - 1 >= 0) && (x - 1 >= 0) && minBoard[x - 1][y - 1] === bomb) {
-      count += 1
-    }
+  if (xPrev >= 0 && yNext <= cols && minBoard[xPrev][yNext] === bomb) {
+    count += 1
   }
 
-  const checkBLN = (x, y) => {
-    if ((y - 1 >= 0) && (x + 1 <= rows) && minBoard[x + 1][y - 1] === bomb) {
-      count += 1
-    }
+  if (xPrev >= 0 && yPrev >= 0 && minBoard[xPrev][yPrev] === bomb) {
+    count += 1
   }
-  checkBLN(x, y)
-  checkTLN(x, y)
-  checkBRN(x, y)
-  checkTRN(x, y)
-  checkBN(x, y)
-  checkLN(x, y)
-  checkTN(x, y)
-  checkRN(x, y)
+
+  if (xNext <= rows && yPrev >= 0 && minBoard[xNext][yPrev] === bomb) {
+    count += 1
+  }
+
   return count
 }
 
