@@ -34,14 +34,8 @@ const drawMines = (board, minCounts, i) => {
   return minBoard
 }
 
-const checkInArray = (arr, string) => {
-  let find = false
-  arr.map(item => {
-    if (item.includes(string)) {
-      find = true
-    }
-  })
-  return find
+const findCheckInArray = (arr, string) => {
+  return !!arr.find(item => item && item.includes(string))
 }
 
 const getNearBomb = (board, x, y, arr, index) => {
@@ -50,7 +44,7 @@ const getNearBomb = (board, x, y, arr, index) => {
   const xNext = x + 1
   const yNext = y + 1
 
-  if (!checkInArray(arr, `${x}_${y}`)) {
+  if (!findCheckInArray(arr, `${x}_${y}`)) {
     if (!arr[index]) {
       arr[index] = []
     }
