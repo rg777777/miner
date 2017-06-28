@@ -34,6 +34,36 @@ const drawMines = (board, minCounts, i) => {
   return minBoard
 }
 
+const getNearBomb = (board, x, y, arr, index) => {
+  const rows = board.length - 1
+  const cols = board[0].length - 1
+  const xNext = x + 1
+  const yNext = y + 1
+
+  if (!arr.toString().includes(`${x}_${y}`)) {
+    if (!arr[index]) {
+      arr[index] = []
+    }
+    arr[index].push(`${x}_${y}`)
+  }
+  if (xNext <= rows && board[xNext][y] === bomb) {
+    return getNearBomb(board, xNext, y, arr, index)
+  }
+
+  // if (xPrev >= 0 && board[xPrev][y] === bomb) {
+  //   return getNearBomb(board, xNext, y, arr, index)
+  // }
+
+  if (yNext <= cols && board[x][yNext] === bomb) {
+    return getNearBomb(board, x, yNext, arr, index)
+  }
+
+  // if (yPrev >= 0 && board[x][yPrev] === bomb) {
+  //   return getNearBomb(board, x, yPrev, arr, index)
+  // }
+  return
+}
+
 const drawNumbers = (minBoard) => {
   for (let y = 0; y < minBoard.length; y++) {
     for (let x = 0; x < minBoard[0].length; x++) {
@@ -43,6 +73,21 @@ const drawNumbers = (minBoard) => {
     }
   }
   return minBoard
+}
+
+const findIslands = (minBoard) => {
+  let i = 0
+  const islands = []
+  for (let y = 0; y < minBoard.length; y++) {
+    for (let x = 0; x < minBoard[0].length; x++) {
+      if (minBoard[x][y] === bomb) {
+        getNearBomb(minBoard, x, y, islands, i)
+        i++
+      }
+    }
+  }
+  const count = islands.filter(it => !!it).length
+  return count
 }
 
 const changeNeighbors = (minBoard, x, y) => {
@@ -91,13 +136,26 @@ const miner = (rows, cols, mineCount) => {
   const board = drawBoard(rows, cols)
   const boardMines = drawMines(board, mineCount)
 
+  console.log('\n', parseString(boardMines))
+
   const parsedBoard = drawNumbers(boardMines)
-  for (let y = 0; y < parsedBoard.length; y++) {
-    for (let x = 0; x < parsedBoard[0].length; x++) {
-      parsedBoard[y][x] = parsedBoard[y][x].toString()
+
+  console.log('\n', parseString(parsedBoard))
+
+  const islandsCount = findIslands(boardMines)
+  return islandsCount
+}
+
+const parseString = (data) => {
+  const eee = []
+  for (let y = 0; y < data.length; y++) {
+    eee[y] = []
+    for (let x = 0; x < data[0].length; x++) {
+      eee[y][x] = data[y][x].toString()
     }
   }
-  console.log('\n', parsedBoard)
+  return eee
 }
 // (rows, cols, mineCount)
-miner(10, 10, 10)
+// miner(10, 10, 30)
+console.log(`islandsCount = `, miner(10, 10, 30))
