@@ -34,33 +34,39 @@ const drawMines = (board, minCounts, i) => {
   return minBoard
 }
 
+const checkInArray = (arr, string) => {
+  let find = false
+  arr.map(item => {
+    if (item.includes(string)) {
+      find = true
+    }
+  })
+  return find
+}
+
 const getNearBomb = (board, x, y, arr, index) => {
   const rows = board.length - 1
   const cols = board[0].length - 1
   const xNext = x + 1
   const yNext = y + 1
 
-  if (!arr.toString().includes(`${x}_${y}`)) {
+  if (!checkInArray(arr, `${x}_${y}`)) {
     if (!arr[index]) {
       arr[index] = []
     }
     arr[index].push(`${x}_${y}`)
   }
+
+  // check next x bomb
   if (xNext <= rows && board[xNext][y] === bomb) {
     return getNearBomb(board, xNext, y, arr, index)
   }
 
-  // if (xPrev >= 0 && board[xPrev][y] === bomb) {
-  //   return getNearBomb(board, xNext, y, arr, index)
-  // }
-
+  // check next y bomb
   if (yNext <= cols && board[x][yNext] === bomb) {
     return getNearBomb(board, x, yNext, arr, index)
   }
 
-  // if (yPrev >= 0 && board[x][yPrev] === bomb) {
-  //   return getNearBomb(board, x, yPrev, arr, index)
-  // }
   return
 }
 
